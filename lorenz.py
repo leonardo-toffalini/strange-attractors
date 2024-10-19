@@ -40,13 +40,23 @@ class LorenzAttractor(ThreeDScene):
         )
         axes.center()
         self.set_camera_orientation(phi=75 * DEGREES, theta=-45 * DEGREES, zoom=1)
-        self.begin_ambient_camera_rotation(rate=0.1)
         self.add(axes)
 
+        diff_eq = MathTex(
+            r"x'(t) =& \sigma (y(t) - x(t)) \\ y'(t) =& x(t)(\rho - z(t)) - y(t) \\ z'(t) =& x(t) y(t) - \beta z(t)"
+        ).scale(0.5).to_corner(UL)
+        self.add_fixed_in_frame_mobjects(diff_eq)
 
-        epsilon = 1e-1
+        params = MathTex(
+            r"\sigma &= 10 \\ \rho &= 28 \\ \beta &= \frac{8}{3}"
+        ).scale(0.5).to_corner(UR)
+        self.add_fixed_in_frame_mobjects(params)
+
+        self.begin_ambient_camera_rotation(rate=0.1)
+
+        epsilon = 1e-5
         evolution_time = 30
-        n_points = 2
+        n_points = 10
         states = [
             [2 + n * epsilon, 5 + n * epsilon, 10 + n * epsilon]
             for n in range(n_points)
@@ -90,9 +100,19 @@ class LorenzAttractorDiffParams(ThreeDScene):
         )
         axes.center()
         self.set_camera_orientation(phi=75 * DEGREES, theta=-45 * DEGREES, zoom=1)
-        self.begin_ambient_camera_rotation(rate=0.1)
         self.add(axes)
 
+        params1 = MathTex(
+            r"\sigma &= 10 \\ \rho &= 28 \\ \beta &= \frac{8}{3}",
+        ).set_color([GREEN, BLUE]).scale(0.5).to_corner(UL)
+        self.add_fixed_in_frame_mobjects(params1)
+
+        params2 = MathTex(
+            r"\sigma &= 13 \\ \rho &= 10 \\ \beta &= \frac{8}{3}"
+        ).set_color([YELLOW, RED]).scale(0.5).to_corner(UR)
+        self.add_fixed_in_frame_mobjects(params2)
+
+        self.begin_ambient_camera_rotation(rate=0.1)
 
         evolution_time = 30
         epsilon = 1e-5
@@ -196,14 +216,21 @@ class LorenzAttractorParamEvolution(ThreeDScene):
         )
         axes.center()
         self.set_camera_orientation(phi=75 * DEGREES, theta=-45 * DEGREES, zoom=1)
-        self.begin_ambient_camera_rotation(rate=0.1)
         self.add(axes)
 
+        step_size = 0.4
+        num_params = 50
 
-        evolution_time = 60
+        params = MathTex(
+            fr"\sigma &= 10 \\ \rho &= 6 + {step_size} \cdot i \quad i = 0, 1, \ldots, {num_params - 1} \\ \beta &= \frac{{8}}{{3}}"
+        ).scale(0.5).to_corner(UL)
+        self.add_fixed_in_frame_mobjects(params)
+
+        self.begin_ambient_camera_rotation(rate=0.1)
+
+        evolution_time = 52
         state = [10, 10, 10]
-        num_params = 80
-        params = [(10, 6 + 0.25*i, 8/3) for i in range(num_params)]
+        params = [(10, 6 + step_size*i, 8/3) for i in range(num_params)]
         colors = color_gradient([GREEN, BLUE], len(params))
 
         curves = VGroup()
@@ -219,6 +246,7 @@ class LorenzAttractorParamEvolution(ThreeDScene):
 
         curves.set_stroke(width=2, opacity=0.8)
         dt = evolution_time / len(curves)
+
 
         self.play(FadeIn(curves[0]))
         for start, target in zip(curves[:-1], curves[1:]):
