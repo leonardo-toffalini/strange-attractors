@@ -2,6 +2,7 @@ from manim import *
 from scipy.integrate import solve_ivp
 from functools import partial
 import numpy as np
+from itertools import product
 
 # TODO: Make the curves parametric and reutnr a dense output with the doe solver
 #       so that the rate at which the curve moves is constant
@@ -82,6 +83,66 @@ class LorenzAttractor(ThreeDScene):
             ),
             run_time=evolution_time
         )
+        phi, theta, focal_distance, gamma, distance_to_origin = self.camera.get_value_trackers()
+        self.wait(1)
+        self.play(distance_to_origin.animate.set_value(0.8), run_time=2)
+        self.wait(5)
+
+
+class LorenzAttractorPointCloud(ThreeDScene):
+    def construct(self):
+        axes = ThreeDAxes(
+            x_range=(-50, 50, 5),
+            y_range=(-50, 50, 5),
+            z_range=(-0, 50, 5),
+            x_length=16,
+            y_length=16,
+            depth=8,
+        )
+        axes.center()
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-45 * DEGREES, zoom=1)
+        self.add(axes)
+
+        self.begin_ambient_camera_rotation(rate=0.1)
+
+        epsilon = 1e-2
+        evolution_time = 30
+
+        states = [
+            [2 + delta_x, 5 + delta_y, 10 + delta_z]
+            for delta_x, delta_y, delta_z in product((0, epsilon), repeat=3)
+        ]
+        colors = color_gradient([RED, BLUE], len(states))
+
+        curves = VGroup()
+        curves_list = []
+        for state, color in zip(states, colors):
+            sol = ode_solution_points(lorenz_system, state, evolution_time)
+            points = list(zip(sol[0], sol[1], sol[2]))
+            curve = VMobject().set_points_smoothly(axes.c2p(points))
+            curve.set_stroke(color)
+            curves.add(curve)
+            curves_list.append(curve)
+
+
+        curves.set_stroke(width=2, opacity=0)
+
+        dots_list = []
+        for curve in curves_list:
+            d = Dot3D(color=curve.color)
+            dots_list.append(d)
+
+        curves_list[0].set_stroke(opacity=0.8)
+        self.add(curves_list[0])
+
+        self.play(
+            *(
+                MoveAlongPath(d, curve, rate_func=linear, run_time=evolution_time)
+                for d, curve in zip(dots_list, curves_list)
+            ),
+            run_time=evolution_time
+        )
+
         phi, theta, focal_distance, gamma, distance_to_origin = self.camera.get_value_trackers()
         self.wait(1)
         self.play(distance_to_origin.animate.set_value(0.8), run_time=2)
