@@ -250,18 +250,20 @@ class SpecialCase4(Scene):
         self.play(Write(sol))
         self.wait(2)
 
-class GeneralCase(Scene):
+class GeneralCase1(Scene):
     def construct(self):
         title = Title(
-            "Általános eset"
+            r"\text{Általános eset}"
         )
         eq = MathTex(
             r"""
             \mu ^{3} + (1 + \alpha + \gamma) \mu ^{2} + (\alpha + \beta)\gamma \mu + 2\alpha \gamma(1 - \beta) = 0
-            """
+            """,
+            substrings_to_isolate=(r"\mu", r"\alpha")
         )
         simplified_cubic = MathTex(
-            r"x^3 + px + q = 0"
+            r"x^3 + px + q = 0",
+            substrings_to_isolate=("p", "q")
         )
         pq = MathTex(
             r"""
@@ -279,24 +281,84 @@ class GeneralCase(Scene):
             \beta < \frac{\alpha(\alpha + \gamma + 3)}{\alpha - \gamma - 1}
             """
         )
+        eq.set_color_by_tex(r"\mu", BLUE)
+        simplified_cubic.set_color_by_tex("p", RED)
+        simplified_cubic.set_color_by_tex("q", GREEN)
+
+        g = VGroup(eq, simplified_cubic)
+        g.arrange(DOWN)
 
         self.play(Write(title))
         self.wait(0.5)
         self.play(Write(eq))
         self.wait(2)
-        self.play(Unwrite(eq))
-        self.wait(0.5)
         self.play(Write(simplified_cubic))
         self.wait(2)
-        self.play(Unwrite(simplified_cubic))
+
+class GeneralCase2(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Általános eset}"
+        )
+        p = MathTex(
+            r"""
+            p = \frac{3(\alpha + \beta)\gamma - (2\alpha \gamma(1 - \beta))^{2}}{3}
+            """,
+        )
+        q = MathTex(
+            r"""
+            q = \frac{2(1 + \alpha + \gamma)^{3} - 9(1 + \alpha + \gamma)(\alpha + \beta)\gamma + 27 \cdot 2\alpha \gamma(1 - \beta)}{27}
+            """,
+        )
+        cardano = MathTex(
+            r"""
+            \xi = \sqrt[3]{ \frac{q}{2} + \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } } + \sqrt[3]{ \frac{q}{2} - \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } }
+            """
+        )
+        sol = MathTex(
+            r"""
+            \beta < \frac{\alpha(\alpha + \gamma + 3)}{\alpha - \gamma - 1}
+            """
+        )
+
+        g = VGroup(p, q)
+        g.arrange(DOWN)
+
+        self.add(title)
         self.wait(0.5)
-        self.play(Write(pq))
+        self.play(Write(p))
+        self.wait(0.5)
+        self.play(Write(q))
         self.wait(2)
-        self.play(Unwrite(pq))
+
+class GeneralCase3(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Általános eset}"
+        )
+        cardano = MathTex(
+            r"""
+            \xi = \sqrt[3]{ \frac{q}{2} + \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } } + \sqrt[3]{ \frac{q}{2} - \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } }
+            """
+        )
+
+        self.add(title)
         self.wait(0.5)
         self.play(Write(cardano))
         self.wait(2)
-        self.play(Unwrite(cardano))
+
+class GeneralCase4(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Általános eset}"
+        )
+        sol = MathTex(
+            r"""
+            \beta < \frac{\alpha(\alpha + \gamma + 3)}{\alpha - \gamma - 1}
+            """
+        )
+
+        self.add(title)
         self.wait(0.5)
         self.play(Write(sol))
         self.wait(2)
