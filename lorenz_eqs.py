@@ -2,51 +2,85 @@ from manim import *
 
 class Opening(Scene):
     def construct(self):
-        title = Title("Original modell")
+        title = Title("Eredeti modell")
         self.play(Write(title))
         diff_eq = MathTex(
-            r"x'(t) =& \sigma (y(t) - x(t)) \\ y'(t) =& x(t)(\rho - z(t)) - y(t) \\ z'(t) =& x(t) y(t) - \beta z(t)"
+            r"""
+            x'(t) =& \sigma (y(t) - x(t)) \\
+            y'(t) =& x(t)(\rho - z(t)) - y(t) \\
+            z'(t) =& x(t) y(t) - \beta z(t)
+            """,
+            substrings_to_isolate=(r"\sigma", r"\rho", r"\beta")
         ).scale(1).move_to(ORIGIN)
+        diff_eq.set_color_by_tex(r"\sigma", RED)
+        diff_eq.set_color_by_tex(r"\rho", GREEN)
+        diff_eq.set_color_by_tex(r"\beta", BLUE)
         self.play(Write(diff_eq))
         self.wait(5)
         self.play(diff_eq.animate.to_edge(LEFT, buff=1))
         self.wait(1)
 
         original_params = MathTex(
-            r"\sigma &= 10 \\ \rho &= 28 \\ \beta &= \frac{8}{3}"
+            r"\sigma &= 10 \\ \rho &= 28 \\ \beta &= \frac{8}{3}",
+            substrings_to_isolate=(r"\sigma", r"\rho", r"\beta")
         ).to_edge(RIGHT, buff=1)
+        original_params.set_color_by_tex(r"\sigma", RED)
+        original_params.set_color_by_tex(r"\rho", GREEN)
+        original_params.set_color_by_tex(r"\beta", BLUE)
         self.play(Write(original_params))
         self.wait(5)
 
-class EqPoints(Scene):
+class EqPoints1(Scene):
     def construct(self):
+        title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         new_params = MathTex(
             r"\sigma &= \alpha \\ \rho &= \beta \\ \beta &= \gamma"
         )
 
+        self.play(Write(title))
+        self.wait(0.5)
+        self.play(Write(new_params))
+        self.wait(1)
+
+class EqPoints2(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         diff_eq = MathTex(
             r"x' &= \alpha y - \alpha x \\ y' &= x(\beta - z) - y \\ z' &= xy - \gamma z"
         )
+
+        self.add(title)
+        self.wait(0.5)
+        self.play(Write(diff_eq))
+        self.wait(2)
+
+class EqPoints3(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         diff_eq_zero = MathTex(
             r"x' &= \alpha y - \alpha x = 0 \\ y' &= x(\beta - z) - y = 0 \\ z' &= xy - \gamma z = 0"
         )
+
+        self.add(title)
+        self.wait(0.5)
+        self.play(Write(diff_eq_zero))
+        self.wait(2)
+
+class EqPoints4(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         diff_eq_zero_clean = MathTex(
             r"y - x &= 0 \\ x(\beta - z) - y &= 0 \\ xy - \gamma z &= 0"
         )
 
-        self.play(Write(new_params))
-        self.wait(1)
-        self.play(Unwrite(new_params))
-        self.wait(1)
-        self.play(Write(diff_eq))
-        self.wait(2)
-        self.play(Transform(diff_eq, diff_eq_zero))
-        self.wait(2)
-        self.play(Transform(diff_eq_zero, diff_eq_zero_clean))
+        self.add(title)
+        self.wait(0.5)
+        self.play(Write(diff_eq_zero_clean))
         self.wait(2)
 
-class Solutions(Scene):
+class EqPointsSolutions(Scene):
     def construct(self):
+        title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         sols = MathTex(
             r"""
                 P_{1} &= \left(0, 0, 0\right) \\
@@ -54,11 +88,13 @@ class Solutions(Scene):
                 P_{3} &= \left(-\sqrt{ \gamma(\beta - 1) },\; -\sqrt{ \gamma(\beta - 1) },\; \beta - 1\right)
             """
         )
+        self.add(title)
         self.play(Write(sols))
         self.wait(2)
 
-class Stability(Scene):
+class Stability1(Scene):
     def construct(self):
+        title = Title(r"\text{Egyensúly pontok stabilitása}")
         eq = MathTex(
             r"""
                 f(x, y, z) = \begin{bmatrix} \alpha y - \alpha x \\
@@ -66,6 +102,15 @@ class Stability(Scene):
                 xy - \gamma z\end{bmatrix}
             """
         )
+
+        self.play(Write(title))
+        self.wait(0.5)
+        self.play(Write(eq))
+        self.wait(2)
+
+class Stability2(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúly pontok stabilitása}")
         eq_deriv = MathTex(
             r"""
                 f'(x, y, z) = \begin{bmatrix} -\alpha & \alpha & 0 \\
@@ -73,59 +118,134 @@ class Stability(Scene):
                 y & x & -\gamma\end{bmatrix}
             """
         )
+
+        self.add(title)
+        self.wait(0.5)
+        self.play(Write(eq_deriv))
+        self.wait(2)
+
+class Stability3(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúly pontok stabilitása}")
         det = MathTex(
             r"""
                 \det(f'(x, y, z) - \lambda I) = \det \left(
                 \begin{bmatrix}
                 -\alpha - \lambda & \alpha & 0 \\
                 \beta - z & -1 - \lambda & -x \\
-                y & x & -\gamma - \lambda
+                y & x & - \gamma - \lambda
                 \end{bmatrix}
                 \right)
-            """
+            """,
+            substrings_to_isolate=(r"y", r"x")
         )
-        det_eq = MathTex(
-            r"""-(\gamma + \lambda)(-\alpha \beta + \alpha \lambda + \alpha z + \alpha + \lambda ^{2} + \lambda) + x(-\alpha x - \alpha y - \lambda x)"""
-        )
+        # det.set_color_by_tex(r"\lambda", BLUE)
 
-        self.play(Write(eq))
-        self.wait(2)
-        self.play(Unwrite(eq))
-        self.wait(0.5)
-        self.play(Write(eq_deriv))
-        self.wait(2)
-        self.play(Unwrite(eq_deriv))
+        self.add(title)
         self.wait(0.5)
         self.play(Write(det))
         self.wait(2)
-        self.play(Unwrite(det))
+
+class Stability4(Scene):
+    def construct(self):
+        title = Title(r"\text{Egyensúly pontok stabilitása}")
+        det_eq = MathTex(
+            r"""-(\gamma + \lambda)(-\alpha \beta + \alpha \lambda + \alpha z + \alpha + \lambda ^{2} + \lambda) + x(-\alpha x - \alpha y - \lambda x)""",
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
+        det_eq.set_color_by_tex(r"\lambda", BLUE)
+
+        self.add(title)
         self.wait(0.5)
         self.play(Write(det_eq))
         self.wait(2)
 
-class SpecialCase(Scene):
+class SpecialCase1(Scene):
     def construct(self):
         title = Title(
             r"\text{Ha } (x, y, z) = (0, 0, 0)"
         )
+        det_eq = MathTex(
+            r"""-(\gamma + \lambda)(-\alpha \beta + \alpha \lambda + \alpha z + \alpha + \lambda ^{2} + \lambda) + x(-\alpha x - \alpha y - \lambda x)""",
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
+        det_eq_subs = MathTex(
+            r"""-(\gamma + \lambda)(-\alpha \beta + \alpha \lambda + \alpha 0 + \alpha + \lambda ^{2} + \lambda) + 0(-\alpha 0 - \alpha 0 - \lambda 0)""",
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
+        det_eq.set_color_by_tex(r"\lambda", BLUE)
+        det_eq_subs.set_color_by_tex(r"\lambda", BLUE)
+
+        self.play(Write(title))
+        self.wait(0.5)
+        self.play(Write(det_eq))
+        self.wait(1)
+        self.play(Transform(det_eq, det_eq_subs))
+        self.wait(2)
+
+class SpecialCase2(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Ha } (x, y, z) = (0, 0, 0)"
+        )
+        det_eq_subs = MathTex(
+            r"""-(\gamma + \lambda)(-\alpha \beta + \alpha \lambda + \alpha 0 + \alpha + \lambda ^{2} + \lambda) + 0(-\alpha 0 - \alpha 0 - \lambda 0)""",
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
         quadratic = MathTex(
             r"""
-                -\alpha \beta + \alpha \lambda + \alpha + \lambda ^{2} + \lambda &= 0 \\
+                -\alpha \beta + \alpha \lambda + \alpha + \lambda ^{2} + \lambda &= 0
+            """,
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
+        det_eq_subs.set_color_by_tex(r"\lambda", BLUE)
+        quadratic.set_color_by_tex(r"\lambda", BLUE)
+
+        self.add(title)
+        self.add(det_eq_subs)
+        self.wait(0.5)
+        self.play(Transform(det_eq_subs, quadratic))
+        self.wait(2)
+
+class SpecialCase3(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Ha } (x, y, z) = (0, 0, 0)"
+        )
+        quadratic1 = MathTex(
+            r"""
+                -\alpha \beta + \alpha \lambda + \alpha + \lambda ^{2} + \lambda &= 0
+            """,
+            substrings_to_isolate=(r"\alpha", r"\lambda")
+        )
+        quadratic2 = MathTex(
+            r"""
                 \lambda ^{2} + (1 + \alpha)\lambda + \alpha(1 - \beta) &= 0
-            """
+            """,
+            substrings_to_isolate=(r"\lambda", r"\alpha")
+        )
+        quadratic1.set_color_by_tex(r"\lambda", BLUE)
+        quadratic2.set_color_by_tex(r"\lambda", BLUE)
+
+        self.add(title)
+        self.add(quadratic1)
+        self.wait(0.5)
+        self.play(Transform(quadratic1, quadratic2))
+        self.wait(2)
+
+class SpecialCase4(Scene):
+    def construct(self):
+        title = Title(
+            r"\text{Ha } (x, y, z) = (0, 0, 0)"
         )
         sol = MathTex(
             r"""
                 \lambda_{1, 2} &= \frac{-(1 + \alpha) \pm \sqrt{ (1 + \alpha)^{2} - 4 \alpha(1 - \beta) }}{2} \\
                 \lambda_{3} &= -\gamma
-            """
+            """,
         )
 
-        self.play(Write(title))
-        self.wait(0.5)
-        self.play(Write(quadratic))
-        self.wait(2)
-        self.play(Unwrite(quadratic))
+        self.add(title)
         self.wait(0.5)
         self.play(Write(sol))
         self.wait(2)

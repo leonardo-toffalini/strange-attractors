@@ -108,11 +108,12 @@ class LorenzAttractorPointCloud(ThreeDScene):
         epsilon = 1e-2
         evolution_time = 30
 
+        # corners of a 3D cube with edge length epsilon, where one edge is in (2, 5, 10)
         states = [
             [2 + delta_x, 5 + delta_y, 10 + delta_z]
             for delta_x, delta_y, delta_z in product((0, epsilon), repeat=3)
         ]
-        colors = color_gradient([RED, BLUE], len(states))
+        colors = color_gradient([YELLOW, GOLD], len(states))
 
         curves = VGroup()
         curves_list = []
@@ -129,10 +130,10 @@ class LorenzAttractorPointCloud(ThreeDScene):
 
         dots_list = []
         for curve in curves_list:
-            d = Dot3D(color=curve.color)
+            d = Dot3D(radius=DEFAULT_DOT_RADIUS/2, color=curve.color)
             dots_list.append(d)
 
-        curves_list[0].set_stroke(opacity=0.8)
+        curves_list[0].set_stroke(BLUE, opacity=0.7)
         self.add(curves_list[0])
 
         self.play(
