@@ -34,7 +34,11 @@ class EqPoints1(Scene):
     def construct(self):
         title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         new_params = MathTex(
-            r"\sigma &= \alpha \\ \rho &= \beta \\ \beta &= \gamma"
+            r"""
+            \sigma &= \alpha \\
+            \rho &= \beta \\
+            \beta &= \gamma
+            """
         )
 
         self.play(Write(title))
@@ -46,7 +50,11 @@ class EqPoints2(Scene):
     def construct(self):
         title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
         diff_eq = MathTex(
-            r"x' &= \alpha y - \alpha x \\ y' &= x(\beta - z) - y \\ z' &= xy - \gamma z"
+            r"""
+            x' &= \alpha y - \alpha x \\
+            y' &= x(\beta - z) - y \\
+            z' &= xy - \gamma z
+            """
         )
 
         self.add(title)
@@ -57,25 +65,63 @@ class EqPoints2(Scene):
 class EqPoints3(Scene):
     def construct(self):
         title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
-        diff_eq_zero = MathTex(
-            r"x' &= \alpha y - \alpha x = 0 \\ y' &= x(\beta - z) - y = 0 \\ z' &= xy - \gamma z = 0"
+        diff_eq = MathTex(
+            r"""
+            x' &= \alpha y - \alpha x \\
+            y' &= x(\beta - z) - y \\
+            z' &= xy - \gamma z
+            """
         )
+        zeros = MathTex(
+            r"""
+            &= 0 \\
+            &= 0 \\
+            &= 0
+            """
+        )
+        g = VGroup(diff_eq, zeros)
+        g.arrange(RIGHT)
 
         self.add(title)
+        self.add(diff_eq)
         self.wait(0.5)
-        self.play(Write(diff_eq_zero))
+        self.play(Write(zeros))
         self.wait(2)
 
 class EqPoints4(Scene):
     def construct(self):
         title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
-        diff_eq_zero_clean = MathTex(
-            r"y - x &= 0 \\ x(\beta - z) - y &= 0 \\ xy - \gamma z &= 0"
+        left = MathTex(
+            r"""
+            x' &= \\
+            y' &= \\
+            z' &=
+            """
+        )
+        diff_eq = MathTex(
+            r"""
+            &\alpha y - \alpha x \\
+            &x(\beta - z) - y \\
+            &xy - \gamma z
+            """
+        )
+        zeros = MathTex(
+            r"""
+            &= 0 \\
+            &= 0 \\
+            &= 0
+            """
         )
 
+        g = VGroup(left, diff_eq, zeros)
+        g.arrange(RIGHT)
+
         self.add(title)
+        self.add(left)
+        self.add(diff_eq)
+        self.add(zeros)
         self.wait(0.5)
-        self.play(Write(diff_eq_zero_clean))
+        self.play(Unwrite(left))
         self.wait(2)
 
 class EqPointsSolutions(Scene):
@@ -137,9 +183,7 @@ class Stability3(Scene):
                 \end{bmatrix}
                 \right)
             """,
-            substrings_to_isolate=(r"y", r"x")
         )
-        # det.set_color_by_tex(r"\lambda", BLUE)
 
         self.add(title)
         self.wait(0.5)
@@ -238,16 +282,24 @@ class SpecialCase4(Scene):
         title = Title(
             r"\text{Ha } (x, y, z) = (0, 0, 0)"
         )
-        sol = MathTex(
+        sol1 = MathTex(
             r"""
-                \lambda_{1, 2} &= \frac{-(1 + \alpha) \pm \sqrt{ (1 + \alpha)^{2} - 4 \alpha(1 - \beta) }}{2} \\
-                \lambda_{3} &= -\gamma
+                \lambda_{1, 2} = \frac{-(1 + \alpha) \pm \sqrt{ (1 + \alpha)^{2} - 4 \alpha(1 - \beta) }}{2}
             """,
         )
+        sol2 = MathTex(
+            r"""
+                \lambda_{3} = -\gamma
+            """,
+        )
+        g = VGroup(sol1, sol2)
+        g.arrange(DOWN)
 
         self.add(title)
         self.wait(0.5)
-        self.play(Write(sol))
+        self.play(Write(sol1))
+        self.wait(0.5)
+        self.play(Write(sol2))
         self.wait(2)
 
 class GeneralCase1(Scene):
@@ -264,22 +316,6 @@ class GeneralCase1(Scene):
         simplified_cubic = MathTex(
             r"x^3 + px + q = 0",
             substrings_to_isolate=("p", "q")
-        )
-        pq = MathTex(
-            r"""
-            p &= \frac{3(\alpha + \beta)\gamma - (2\alpha \gamma(1 - \beta))^{2}}{3} \\
-            q &= \frac{2(1 + \alpha + \gamma)^{3} - 9(1 + \alpha + \gamma)(\alpha + \beta)\gamma + 27 \cdot 2\alpha \gamma(1 - \beta)}{27}
-            """
-        )
-        cardano = MathTex(
-            r"""
-            \xi = \sqrt[3]{ \frac{q}{2} + \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } } + \sqrt[3]{ \frac{q}{2} - \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } }
-            """
-        )
-        sol = MathTex(
-            r"""
-            \beta < \frac{\alpha(\alpha + \gamma + 3)}{\alpha - \gamma - 1}
-            """
         )
         eq.set_color_by_tex(r"\mu", BLUE)
         simplified_cubic.set_color_by_tex("p", RED)
@@ -309,16 +345,6 @@ class GeneralCase2(Scene):
             r"""
             q = \frac{2(1 + \alpha + \gamma)^{3} - 9(1 + \alpha + \gamma)(\alpha + \beta)\gamma + 27 \cdot 2\alpha \gamma(1 - \beta)}{27}
             """,
-        )
-        cardano = MathTex(
-            r"""
-            \xi = \sqrt[3]{ \frac{q}{2} + \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } } + \sqrt[3]{ \frac{q}{2} - \sqrt{ \frac{q^{2}}{4} + \frac{p^{3}}{27} } }
-            """
-        )
-        sol = MathTex(
-            r"""
-            \beta < \frac{\alpha(\alpha + \gamma + 3)}{\alpha - \gamma - 1}
-            """
         )
 
         g = VGroup(p, q)
