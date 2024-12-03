@@ -30,6 +30,44 @@ class Opening(Scene):
         self.play(Write(original_params))
         self.wait(5)
 
+class Steps(Scene):
+    def construct(self):
+        question = Text("Mik a modellezés lépései?", color=YELLOW).scale(1.5)
+        text1 = Text("Mit modellezünk?", color=BLUE)
+        text2 = Text("Milyen folyamatok állnak fent?", color=BLUE)
+        text3 = Text("Mik a domináns folyamatok?", color=BLUE)
+        text4 = Text("Formalizálni a feladatot matematikailag.", color=BLUE)
+        text5 = Text("Kvalitatív tulajdonságok vizsgálása.", color=BLUE)
+        text6 = Text("Matematikai modell megoldása.", color=BLUE)
+        final = Text("Matematikai modell megoldása.", color=BLUE)
+        step1 = Text("Egyensúly helyzetek megtalálása.", color=YELLOW)
+        step2 = Text("Egyensúlyi helyzetek stabilitása.", color=YELLOW)
+        answers = VGroup(text1, text2, text2, text3, text4, text5, text6)
+        answers.arrange(DOWN)
+        full_text = VGroup(question, answers)
+        full_text.arrange(DOWN)
+        steps = VGroup(step1, step2)
+        steps.arrange(DOWN)
+
+        self.play(Write(question))
+        self.wait(3)
+        for answer in answers:
+            self.play(Write(answer))
+            self.wait(1)
+
+        self.play(Circumscribe(text6))
+        self.wait(1)
+        self.play(AnimationGroup(
+            FadeOut(full_text, shift=UP*1.5),
+            FadeIn(final, shift=UP*1.5)
+        ))
+        self.wait(2)
+        self.play(AnimationGroup(
+            FadeOut(final, shift=UP*1.5),
+            FadeIn(steps, shift=UP*1.5)
+        ))
+
+
 class EqPoints1(Scene):
     def construct(self):
         title = Title(r"\text{Egyensúlyi pontok kiszámolása}")
@@ -293,7 +331,7 @@ class SpecialCase4(Scene):
             """,
         )
         g = VGroup(sol1, sol2)
-        g.arrange(DOWN)
+        g.arange(DOWN)
 
         self.add(title)
         self.wait(0.5)
